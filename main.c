@@ -5,13 +5,12 @@
 int cnt = 0;
 int cnt_semi = 0;
 
-void CTRL_C(int SIG);
 int main ()
 {
 
 	CHILDPID = -1;
 	SHELLID = 0;
-
+	//piping reset input-output
 	int std_in_saved = dup(0);
 	int std_out_saved = dup(1);
 	dup2(std_in_saved, STDIN_FILENO);
@@ -59,12 +58,14 @@ int main ()
 				//printf("cnt_semi = %d\n", cnt_semi);
 				//printf("hi1\n");
 				cnt = 0;
+				//piping check
 				int ret = piping(cmd[j], home_dir);
 				if (ret == 1)
 					continue;
 
 				//printf("doing redirection flag check 61\n");
 				//if no piping then execute command in main.
+				//redirection check in case of semicolon command
 				red_flag_check(cmd[j]);
 				char **list;
 				//printf("helo helo helo\n");
@@ -76,6 +77,7 @@ int main ()
 				}
 				execute_command(list, home_dir, cnt, cmd[j]);
 
+				//piping dup reset input-output
 				dup2(std_in_saved, STDIN_FILENO);
 				dup2(std_out_saved, STDOUT_FILENO);
 
@@ -94,13 +96,14 @@ int main ()
 			//printf("cnt  = %d line 92 main\n", cnt);
 			if (cnt == 1)
 				continue;
-
+			//piping check in case of no semicolon
 			int ret = piping(input, home_dir);
 			if (ret == 1)
 				continue;
 
 			//printf("doing redirection flag check 78\n");
 			//if no piping then execute command in main.
+			//redirection check in case of no semicolon
 			red_flag_check(input);
 			//printf("doing redirection flag check 78\n");
 			//char **list;
@@ -113,6 +116,7 @@ int main ()
 			//printf("hi from 111\n");
 			execute_command( list, home_dir, cnt, input);
 
+			//piping dup reset input output
 			dup2(std_in_saved, STDIN_FILENO);
 			dup2(std_out_saved, STDOUT_FILENO);
 		}
@@ -123,17 +127,4 @@ int main ()
 }
 
 
-void CTRL_C(int SIG)
-{
-	int pid = getpid();
-	if (pid != SHELLID)
-	{
-		return;
-	}
-	if (CHILDPID != -1)
-	{
-		kill(CHILDPID, SIGINT);
-		signal(SIGINT, CTRL_C);
-	}
-}
 
