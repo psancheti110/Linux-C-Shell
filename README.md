@@ -1,4 +1,4 @@
-# LINUX SHELL : MYSHELL
+# Linux C-Shell
 
 ## Brief Overview
 
@@ -117,8 +117,6 @@ The commands that are supported are as follows :
 
 * The terminal also supports
 
-  * CTRL + Z
-
   * CTRL + C
 
 ## Running the Shell
@@ -141,11 +139,11 @@ quit
 ## Pseudo Home
 
 If the executable is being run from a different directory, specify the corresponding path. <br>
-The "Pseudo Home" directory for the shell will be the directory in which the executable ./run resides.
+The "Pseudo Home" directory for the shell will be the directory in which the executable ./a.out resides.
 
 ## Code Files and Files
 
-* myshell.c:
+* main.c:
 
   * prompt(): function to print th shell promt.
 
