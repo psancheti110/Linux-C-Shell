@@ -5,6 +5,7 @@
 int cnt = 0;
 int cnt_semi = 0;
 
+void CTRL_C(int SIG);
 int main ()
 {
 
@@ -127,4 +128,17 @@ int main ()
 }
 
 
+void CTRL_C(int SIG)
+{
+	int pid = getpid();
+	if (pid != SHELLID)
+	{
+		return;
+	}
+	if (CHILDPID != -1)
+	{
+		kill(CHILDPID, SIGINT);
+		signal(SIGINT, CTRL_C);
+	}
+}
 
